@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat API DB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #catImage {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+        #fetchButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #fetchButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cat API DB</h1>
+    <button id="fetchButton">Fetch Cat Image</button>
+    <div id="imageContainer"></div>
+
+    <script>
+        document.getElementById('fetchButton').addEventListener('click', fetchCatImage);
+
+        function fetchCatImage() {
+            const headers = new Headers({
+                "Content-Type": "application/json",
+                "x-api-key": "api_key=live_LXw4RQ2vrgIqtL6MYf4ulgJBIvAR2nMWH7wTjdJwhQ7scgylmIi7IC42l7qSQf8C"
+            });
+
+            const requestOptions = {
+                method: 'GET',
+                headers: headers,
+                redirect: 'follow'
+            };
+
+            fetch("https://api.thecatapi.com/v1/images/search?size=med&mime_types=jpg&format=json&has_breeds=true&order=RANDOM&page=0&limit=1", requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    const catImageUrl = data[0].url;
+                    displayCatImage(catImageUrl);
+                })
+                .catch(error => console.log('error', error));
+        }
+
+        function displayCatImage(url) {
+            const imageContainer = document.getElementById('imageContainer');
+            imageContainer.innerHTML = `<img id="catImage" src="${url}" alt="Cat Image">`;
+        }
+    </script>
+</body>
+</html>
